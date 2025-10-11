@@ -1,10 +1,23 @@
 ﻿
 
+
 namespace Catalog.Api.Products.CreateProduct;
 
 public record CreateProductCommand(string Name, string Description, decimal Price, List<string> Category, string ImageFile)
         : ICommand<CreateProductResult>;
 public record CreateProductResult(Guid Id);
+
+public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+{
+    public CreateProductCommandValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.Description).NotEmpty().MaximumLength(500);
+        RuleFor(x => x.Price).GreaterThan(0);
+        RuleFor(x => x.Category).NotEmpty();
+        RuleFor(x => x.ImageFile).NotEmpty();
+    }
+}
 public class CreateProductCommandHandler(IDocumentSession session)
     : ICommandHandler<CreateProductCommand, CreateProductResult>
 {
