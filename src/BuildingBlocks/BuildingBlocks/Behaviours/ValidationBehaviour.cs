@@ -20,9 +20,9 @@ public class ValidationBehaviour<TRequest, TResponse>
             .SelectMany(r => r.Errors)
             .ToList();            
 
-        if (failures.Any())
+        if (failures.Count != 0)
             throw new ValidationException(failures);
 
-        return await next();
+        return await next(cancellationToken);
     }
 }
