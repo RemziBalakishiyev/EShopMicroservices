@@ -3,6 +3,12 @@ services:
     image: postgres:15-alpine
     volumes:
       - postgres_catalog:/var/lib/postgresql/data
+   
+  basketdb:
+    image: postgres:15-alpine
+
+  distributedcache:
+    image: "redis"
 
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
@@ -10,5 +16,12 @@ services:
         context: .
         dockerfile: Services/Catalog/Catalog.Api/Dockerfile
 
+  basket.api:
+    image: ${DOCKER_REGISTRY-}basketapi
+    build:
+        context: .
+        dockerfile: Services/Basket/Basket.API/Dockerfile
+
 volumes:
   postgres_catalog:
+  postgres_basket:  
